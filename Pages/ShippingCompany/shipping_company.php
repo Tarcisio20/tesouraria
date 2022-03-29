@@ -29,7 +29,7 @@
         SALDO: <?php echo $data['balance']; ?>
     </div>
     <div>
-        <a href="./../Treasury/move_treasury_shipping.php?id=<?php echo $data['id_shipping']; ?>">Adicionar Saldo</a>
+        <a href="./../Treasury/move_treasury_shipping.php?id=<?php echo $data['id_shipping']; ?>">Movimentar Saldo</a>
     </div>
     <div>
         <h3>TERMINAIS</h3>

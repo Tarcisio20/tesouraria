@@ -20,11 +20,14 @@ USE `crednosso`;
 -- Copiando estrutura para tabela crednosso.atms
 CREATE TABLE IF NOT EXISTS `atms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_treasury` int(11) DEFAULT 0,
-  `name` varchar(150) DEFAULT NULL,
-  `shortened_name` varchar(100) DEFAULT NULL,
+  `id_atm` int(11) NOT NULL,
+  `id_treasury` int(11) NOT NULL DEFAULT 0,
+  `name_atm` varchar(150) NOT NULL,
+  `shortened_name_atm` varchar(100) NOT NULL,
+  `status` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `shortened_name` (`shortened_name`)
+  UNIQUE KEY `shortened_name` (`shortened_name_atm`) USING BTREE,
+  UNIQUE KEY `id_atm` (`id_atm`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela crednosso.atms: ~0 rows (aproximadamente)
@@ -166,9 +169,9 @@ CREATE TABLE IF NOT EXISTS `shipping_company` (
   `active` enum('Y','N') DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_shipping` (`id_shipping`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.shipping_company: ~66 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.shipping_company: ~74 rows (aproximadamente)
 /*!40000 ALTER TABLE `shipping_company` DISABLE KEYS */;
 INSERT INTO `shipping_company` (`id`, `id_shipping`, `name_shipping`, `active`) VALUES
 	(1, 1, 'MATEUS SUPERMERCADOS', 'Y'),
@@ -236,7 +239,19 @@ INSERT INTO `shipping_company` (`id`, `id_shipping`, `name_shipping`, `active`) 
 	(63, 63, 'TESTE', 'N'),
 	(64, 64, 'SUPER PIRIPIRI', 'Y'),
 	(65, 65, 'MIX TERESINA', 'Y'),
-	(66, 66, 'MIX TIMON', 'Y');
+	(66, 66, 'MIX TIMON', 'Y'),
+	(68, 67, 'PRESERV - RECIFE', 'Y'),
+	(69, 68, 'MIX BRAGANCA', 'Y'),
+	(71, 69, 'SUPER CANAA DOS CARAJAS', 'Y'),
+	(72, 70, 'SUPER ESTREITO', 'Y'),
+	(73, 71, 'MIX PARAGOMINAS', 'Y'),
+	(74, 72, 'MIX TIMON ALVORADA', 'Y'),
+	(75, 73, 'MIX JUAZEIRO', 'Y'),
+	(76, 74, 'MIX PETROLINA', 'Y'),
+	(77, 75, 'PROSEGUR FEIRA DE SANTANA', 'Y'),
+	(78, 76, 'MIX BENGUI', 'Y'),
+	(79, 77, 'TEXEIRA DE FREITAS', 'Y'),
+	(80, 78, 'MIX ITAPIPOCA', 'Y');
 /*!40000 ALTER TABLE `shipping_company` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela crednosso.treasury
@@ -249,10 +264,10 @@ CREATE TABLE IF NOT EXISTS `treasury` (
   UNIQUE KEY `id_shipping` (`id_shipping`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.treasury: ~1 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.treasury: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `treasury` DISABLE KEYS */;
 INSERT INTO `treasury` (`id`, `id_shipping`, `id_input_type`, `balance`) VALUES
-	(1, 1, 1, 100);
+	(1, 1, 1, 0);
 /*!40000 ALTER TABLE `treasury` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela crednosso.users
@@ -264,15 +279,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(255) DEFAULT NULL,
   `nivel` enum('admin','user') NOT NULL DEFAULT 'user',
   `active` enum('Y','N') DEFAULT 'Y',
+  `token` varchar(253) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela crednosso.users: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `nivel`, `active`) VALUES
-	(1, 'Tarcisio Silva', 'tarcisio.silva@crednosso.com.br', 'TARCISIOSILVA', '$2y$10$YW7P6YfkEzFg0asoolofV.J.CvvKl.jGVZyYpiZmrz0Ff/iM3JzNi', 'admin', 'Y');
+INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `nivel`, `active`, `token`) VALUES
+	(1, 'Tarcisio Silva', 'tarcisio.silva@crednosso.com.br', 'TARCISIOSILVA', '$2y$10$YW7P6YfkEzFg0asoolofV.J.CvvKl.jGVZyYpiZmrz0Ff/iM3JzNi', 'admin', 'Y', '$2y$10$bnGglRN8Qmwf9DuUFAU94uJgUegLHa2enibHQHYAhGRxKALzQnkZW'),
+	(2, 'Dillan Andrew', 'dillan.sousa@crednosso.com.br', 'DILLANSOUSA', '12345', 'user', 'Y', NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
