@@ -59,7 +59,7 @@ $users = $adm->getAllUsers();
                         <td><?php echo $user['active']; ?></td>
                         <td>
                             <a href="./generate_password.php?id=<?php echo $user['id']; ?>">SENHA PADRAO</a>
-                            <a>EDITAR</a>
+                            <a href="./update_user.php?id=<?php echo $user['id']; ?>">EDITAR</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

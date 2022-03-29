@@ -45,6 +45,16 @@ class AdminClass{
         return $data['error'] = 'Usuario não localizado';
     }
 
+    public function getUserByID($id){
+        $sql = $this->database->query("SELECT id, name, username, email, nivel, active FROM $this->table WHERE id = ".$id);
+        if($sql->rowCount() > 0){
+            $data = $sql->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }
+        return false;
+    }
+
+
     public function verifyUser($id, $username,  $token){
 
         $token = password_hash($id.'-'.$username, PASSWORD_DEFAULT);
