@@ -15,17 +15,11 @@ class AdminClass{
     public function getAllUsers(){
         $sql = $this->database->query("SELECT id, name, email, username, nivel, active FROM $this->table");
         if($sql->rowCount() > 0){
-            $dataFull = $sql->fetchAll(PDO::FETCH_ASSOC);
-            foreach($dataFull as $dt){
-                $data[] = $dt;
-            }
-            $data['error'] = '';
-        }else{
-            $data['error'] = 'Sem usuarios para listar';
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
         }
-        return $data;  
-
-
+        return false;
+          
     }
 
     public function getUser($username, $password){
@@ -72,6 +66,17 @@ class AdminClass{
         }
         return $data['error'] = 'Erro no login';
         
+    }
+
+    public function generateDefaultPassword($idUser){
+        $pass = password_hash('jgv@12345', PASSWORD_DEFAULT);
+
+        $sql = $this->database->query("UPDATE $this->table SET password = '".$pass."' WHERE id = ".$idUser);
+        if($sql->rowCount() > 0){
+            return true;
+        }
+        return false;
+
     }
 
 

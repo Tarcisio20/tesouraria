@@ -37,7 +37,7 @@ $users = $adm->getAllUsers();
     <h5><?php echo $data['nivel']; ?></h5>
     <a href="">ADICINAR USUARIO</a>
     <a href="../../index.php">VOLTAR</a>
-    <?php if($users['error'] === ''): ?>
+    <?php if($users): ?>
         <table width="100%" border="1px">
             <thead>
                 <tr>
@@ -51,7 +51,6 @@ $users = $adm->getAllUsers();
             </thead>
             <tbody>
                 <?php foreach($users as $user): ?>
-                    <?php // print_r($user); ?>
                     <tr>
                         <td><?php echo $user['name']; ?></td>
                         <td><?php echo $user['username']; ?></td>
@@ -59,7 +58,7 @@ $users = $adm->getAllUsers();
                         <td><?php echo $user['nivel']; ?></td>
                         <td><?php echo $user['active']; ?></td>
                         <td>
-                            <a>SENHA PADRAO</a>
+                            <a href="./generate_password.php?id=<?php echo $user['id']; ?>">SENHA PADRAO</a>
                             <a>EDITAR</a>
                         </td>
                     </tr>
@@ -67,7 +66,7 @@ $users = $adm->getAllUsers();
             </tbody>
         </table>
     <?php else: ?>
-        <p><?php echo $users['error']; ?></p>
+        <p>Nada a mostrar</p>
     <?php endif; ?>
 </body>
 </html>
