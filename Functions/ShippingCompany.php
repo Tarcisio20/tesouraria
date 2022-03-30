@@ -26,6 +26,15 @@ class ShippingCompanyClass{
       return $data;
     }
 
+    public function getNameShippingCompanyById($idShipping){
+        $sql = $this->database->query("SELECT name_shipping FROM $this->table WHERE id = $idShipping");
+        if($sql->rowCount() > 0){
+          $data = $sql->fetch(PDO::FETCH_ASSOC);
+          return $data['name_shipping'];
+        }
+        return false;
+    }
+
     public function getShippingCompanyAndBalance(){
       $sql = $this->database->query("SELECT * FROM ". $this->table);
 

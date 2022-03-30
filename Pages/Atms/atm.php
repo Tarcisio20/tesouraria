@@ -1,8 +1,32 @@
 <?php
+    session_start();
+    if(!isset($_SESSION['token_crednosso']) && $_SESSION['token_crednosso'] === null ){
+        header("Location: ./Pages/Login/login.php");
+    }
+    
     require_once  './../../Functions/Atm.php';
-    $atms = new AtmClass();
+    include_once '../../Functions/Admin.php';
+    include_once '../../Functions/ShippingCompany.php';
 
-    $data = $atms->getAllAtms();
+    $atms = new AtmClass();
+    $adm = new AdminClass(); 
+    $shipping = new ShippingCompanyClass();
+
+    $dataAdmin = $adm->verifyUser($_SESSION['id_crednosso'], 
+    $_SESSION['username_crednosso'], $_SESSION['token_crednosso']);
+    if($dataAdmin['error'] !== ''){
+        $_SESSION['id_crednosso'] = null;
+        $_SESSION['token_crednosso'] = null;
+        $_SESSION['username_crednosso'] = null;
+        header("Location: ./Pages/Login/login.php");
+    }
+
+    $dataF = $atms->getAllAtms();
+    foreach($dataF as $key => $d){
+        $data[] = $d;
+        $data[$key]['treasury_name'] = $shipping->getNameShippingCompanyById($d['id_treasury']); 
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +43,7 @@
         <a href="./add_atm.php">ADICIONAR ATMs</a>
         <a href="./../../index.php">VOLTAR</a>
     </div>
-    <?php if(isset($data['error']) && $data['error'] === ''): ?>
+    <?php if($data !== false): ?>
     <table width="100%" border="1px">
         <thead>
             <tr>
@@ -35,12 +59,14 @@
            
                 <?php foreach($data as $dt): ?>
                     <tr>
-                        <td><?php echo $data['id_atm']; ?></td>
-                        <td><?php echo $data['name_atm']; ?></td>
-                        <td><?php echo $data['hortened_name_atm']; ?></td>
-                        <td><?php echo $data['status']; ?></td>
+                        <td><?php echo $dt['id_atm']; ?></td>
+                        <td><?php echo $dt['name_atm']; ?></td>
+                        <td><?php echo $dt['shortened_name_atm']; ?></td>
+                        <td><?php echo $dt['treasury_name']; ?></td>
+                        <td><?php echo $dt['status']; ?></td>
                         <td>
-                            EDITAR | EXCLUIR
+                            <a href="./edit_atm.php?id=<?php echo $dt['id']; ?>">EDITAR</a>
+                            <a href="./delete_atm.php?id=<?php echo $dt['id']; ?>">BLOQUEAR</a>
                         </td>
                     </tr>    
                 <?php endforeach; ?>
@@ -49,7 +75,7 @@
         </tbody>
     </table>
     <?php else: ?>
-        <p><?php echo $data['error']; ?></p>
+        <p>Nada a Mostrar!</p>
     <?php endif; ?>
 </body>
 </html>
