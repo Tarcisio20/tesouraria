@@ -35,7 +35,7 @@ $users = $adm->getAllUsers();
     <h3>Area Administrativa</h3>
     <h2><?php echo $data['username']; ?></h2>
     <h5><?php echo $data['nivel']; ?></h5>
-    <a href="">ADICINAR USUARIO</a>
+    <a href="./add_user.php">ADICINAR USUARIO</a>
     <a href="../../index.php">VOLTAR</a>
     <?php if($users): ?>
         <table width="100%" border="1px">
@@ -60,6 +60,9 @@ $users = $adm->getAllUsers();
                         <td>
                             <a href="./generate_password.php?id=<?php echo $user['id']; ?>">SENHA PADRAO</a>
                             <a href="./update_user.php?id=<?php echo $user['id']; ?>">EDITAR</a>
+                            <a href="./delete_user.php?id=<?php echo $user['id']; ?>&status=<?php echo $user['active']; ?>">
+                            <?php if($user['active'] === 'Y'){ echo "BLOQUEAR"; }else{ echo "DESBLOQUEAR"; } ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

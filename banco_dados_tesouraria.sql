@@ -274,22 +274,25 @@ INSERT INTO `treasury` (`id`, `id_shipping`, `id_input_type`, `balance`) VALUES
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
-  `email` varchar(200) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `nivel` enum('admin','user') NOT NULL DEFAULT 'user',
-  `active` enum('Y','N') DEFAULT 'Y',
   `token` varchar(253) DEFAULT NULL,
+  `date_login` date DEFAULT NULL,
+  `change_date` datetime DEFAULT NULL,
+  `active` enum('Y','N') DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.users: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.users: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `nivel`, `active`, `token`) VALUES
-	(1, 'Tarcisio Silva', 'tarcisio.silva@crednosso.com.br', 'TARCISIOSILVA', '$2y$10$YW7P6YfkEzFg0asoolofV.J.CvvKl.jGVZyYpiZmrz0Ff/iM3JzNi', 'admin', 'Y', '$2y$10$bnGglRN8Qmwf9DuUFAU94uJgUegLHa2enibHQHYAhGRxKALzQnkZW'),
-	(2, 'Dillan Andrew', 'dillan.sousa@crednosso.com.br', 'DILLANSOUSA', '12345', 'user', 'Y', NULL);
+INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`, `nivel`, `token`, `date_login`, `change_date`, `active`) VALUES
+	(1, 'Tarcisio Silva', 'TARCISIOSILVA', 'tarcisio.silva@crednosso.com.br', '$2y$10$YW7P6YfkEzFg0asoolofV.J.CvvKl.jGVZyYpiZmrz0Ff/iM3JzNi', 'admin', '$2y$10$bnGglRN8Qmwf9DuUFAU94uJgUegLHa2enibHQHYAhGRxKALzQnkZW', NULL, NULL, 'Y'),
+	(2, 'Dillan Andrew', 'DILLANSOUSA', 'dillan.sousa@crednosso.com.br', '$2y$10$s4196SsNI.4nNFNtfop3c.gItB3.lffP/gsGfUH24s/NlY4O886TC', 'user', NULL, NULL, NULL, 'Y'),
+	(6, 'teste teste', 'TESTETESTE', 'teste@teste.com', '$2y$10$7AP.N2zJndZy2PuV0Do16exjsQVxPADqPrj2bVttSvGShMaUjXnqK', 'user', NULL, NULL, NULL, 'N');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

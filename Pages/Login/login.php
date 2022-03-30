@@ -3,6 +3,7 @@
     include_once './../../Functions/Admin.php';
     $adm = new AdminClass();
 
+    $error = '';
 
     if(isset($_POST['username']) && $_POST['username'] !== null &&
      isset($_POST['password']) && $_POST['password'] !== null){
@@ -17,9 +18,7 @@
             header("Location: ./../../index.php");
 
         }else{
-            //setcookie('login_crednosso', null);
-            //header("Location: ./login.php?error=".$data['error']);
-            echo "Com erros";
+            $error = 'Problemas ao logar!';
         }
     }
 
@@ -34,6 +33,7 @@
 </head>
 <body>
     <form method="POST">
+        <p><?php if($error !== ''){ echo $error; } $error = ''; ?></p>
         <div>
             <label for="username">Username</label>
             <input type="text" name="username" id="username" />

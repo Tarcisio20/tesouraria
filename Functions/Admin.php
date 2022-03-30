@@ -38,7 +38,13 @@ class AdminClass{
                 $data['token'] = $this->setToken($data['id'], $data['username']);
                 $this->database->query("UPDATE $this->table SET 
                 token = '".$data['token']."' WHERE id = ".$data['id']);
-                $data['error'] = '';
+
+                if($data['active'] === 'Y'){
+                    $data['error'] = '';
+                    
+                }elseif($data['active'] === 'N'){
+                    $data['error'] = 'Usuario não localizado';
+                }
                 return $data;
             }
         }
@@ -46,7 +52,7 @@ class AdminClass{
     }
 
     public function getUserByID($id){
-        $sql = $this->database->query("SELECT id, name, username, email, nivel, active FROM $this->table WHERE id = ".$id);
+        $sql = $this->database->query("SELECT id, name, username, email, nivel, date_login, active FROM $this->table WHERE id = $id");
         if($sql->rowCount() > 0){
             $data = $sql->fetch(PDO::FETCH_ASSOC);
             return $data;
@@ -54,6 +60,61 @@ class AdminClass{
         return false;
     }
 
+    public function adduser($array){
+
+        $name = $array['name'];
+        $username = trim( strtoupper($array['username']));
+        $email = $array['email'];
+        $nivel = $array['nivel'];
+        $active = $array['active'];
+
+        $sql =$this->database->prepare("INSERT INTO $this->table (name, username, email, nivel, active) VALUES 
+        (:name, :username, :email, :nivel, :active)");
+        $sql->bindValue(":name", $name);
+        $sql->bindValue(":username", $username);
+        $sql->bindValue(":email", $email);
+        $sql->bindValue(":nivel", $nivel);
+        $sql->bindValue(":active", $active);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $idInsert = $this->database->lastInsertId();
+            $this->generateDefaultPassword($idInsert);
+            return true;
+        }
+        return false;
+    }
+    
+    public function updateUser($array){
+        $sql = $this->database->query("UPDATE $this->table SET
+            name = '".$array['name']."', username = '".$array['username']."', email = '".$array['email']."', 
+            nivel = '".$array['nivel']."', active = '".$array['active']."' WHERE id = ".$array['id_user']
+        );
+        if($sql->rowCount() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public function deleteUser($idUser, $status){
+
+        if($status === 'Y'){
+            $sql = $this->database->prepare("UPDATE $this->table SET active = 'N' WHERE id = :id");
+            $sql->bindValue(":id", $idUser);
+            $sql->execute();
+            if($sql->rowCount() > 0){
+                return true;
+            }
+        }elseif($status === 'N'){
+            $sql = $this->database->prepare("UPDATE $this->table SET active = 'Y' WHERE id = :id");
+            $sql->bindValue(":id", $idUser);
+            $sql->execute();
+            if($sql->rowCount() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public function verifyUser($id, $username,  $token){
 
@@ -68,8 +129,14 @@ class AdminClass{
                     $data['name'] = $dataFull['name'];
                     $data['username'] = $dataFull['username'];
                     $data['nivel'] = $dataFull['nivel'];
-                    $data['active'] = $dataFull['active'];;
-                    $data['error'] = '';
+                    $data['active'] = $dataFull['active'];
+
+                    if($data['active'] === 'Y'){
+                        $data['error'] = '';
+                    }elseif($data['active'] === 'N'){
+                        $data['error'] = 'Usuario bloqueado!';
+                    }
+                    
                     return $data;
                 }
             }
