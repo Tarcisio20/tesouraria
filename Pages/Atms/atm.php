@@ -66,7 +66,9 @@
                         <td><?php echo $dt['status']; ?></td>
                         <td>
                             <a href="./edit_atm.php?id=<?php echo $dt['id']; ?>">EDITAR</a>
-                            <a href="./delete_atm.php?id=<?php echo $dt['id']; ?>">BLOQUEAR</a>
+                            <a href="./delete_atm.php?id=<?php echo $dt['id']; ?>&status=<?php echo $dt['status']; ?>">
+                                <?php if($dt['status'] === 'Y'){ echo 'BLOQUEAR';}else{ echo 'DESBLOQUEAR';} ?>
+                            </a>
                         </td>
                     </tr>    
                 <?php endforeach; ?>

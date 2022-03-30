@@ -87,6 +87,7 @@ $data = $atm->getAtmById($_GET['id']);
             <label>CASSETE D</label>
             <input type="number" name="cass_D" placeholder="CASSETE D" value="<?php echo $data['cass_D']; ?>"  />
         </div>
+        <input type="hidden" name="id_atm" value="<?php echo $data['id']; ?>" />
         <input type="submit" value="EDITAR" />
         <a href="./atm.php">VOLTAR</a>
     </form>
