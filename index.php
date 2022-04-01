@@ -34,9 +34,10 @@
 <body>
     <h2>TESOURARIA</h2>
     <a href="./Pages/ShippingCompany/add_shipping_company.php">ADICIONAR TESOURARIA</a>
-    <a href="./Pages/Atms/atm.php">ADICIONAR ATMS</a>
+    <a href="./Pages/Atms/atm.php">ATMS</a>
     <?php if($data['nivel'] === 'admin'): ?>
     <a href="./Pages/Admin/admin.php">CONFIGURACÕES</a>
+    <a href="./Pages/Request/request.php">PEDIDOS</a>
     <?php endif; ?>
     <a href="./Pages/Login/logout.php">DESLOGAR</a>
     <?php if(count($tesourarias) > 0): ?>

@@ -24,14 +24,20 @@ CREATE TABLE IF NOT EXISTS `atms` (
   `id_treasury` int(11) NOT NULL DEFAULT 0,
   `name_atm` varchar(150) NOT NULL,
   `shortened_name_atm` varchar(100) NOT NULL,
+  `cass_A` int(11) DEFAULT 10,
+  `cass_B` int(11) DEFAULT 20,
+  `cass_C` int(11) DEFAULT 50,
+  `cass_D` int(11) DEFAULT 100,
   `status` enum('Y','N') NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `shortened_name` (`shortened_name_atm`) USING BTREE,
   UNIQUE KEY `id_atm` (`id_atm`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.atms: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.atms: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `atms` DISABLE KEYS */;
+INSERT INTO `atms` (`id`, `id_atm`, `id_treasury`, `name_atm`, `shortened_name_atm`, `cass_A`, `cass_B`, `cass_C`, `cass_D`, `status`) VALUES
+	(1, 1, 2, 'SUPER COHAMA 01', 'SUP COHAMA 01', 10, 20, 50, 100, 'Y');
 /*!40000 ALTER TABLE `atms` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela crednosso.authorized_token
@@ -60,6 +66,18 @@ INSERT INTO `authorized_token` (`id`, `id_user`, `token`, `datetime_access`, `ac
 	(52, 1, '$2y$10$mJjcqqOBp9soyRECSIahhedUNcGfWOMLlliq3opWkQJ9BpBT.pYJS', '2021-10-11 22:43:21', 'N'),
 	(53, 1, '$2y$10$4DBDZnOtOiu4L6lBiOH/Demz00Wr5nTfogjwLzLWroq2CVQEsv2u2', '2021-10-12 10:32:19', 'Y');
 /*!40000 ALTER TABLE `authorized_token` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela crednosso.batchs
+CREATE TABLE IF NOT EXISTS `batchs` (
+  `id` int(11) NOT NULL,
+  `batch` varchar(100) DEFAULT NULL,
+  `status` set('open','paused','closed') DEFAULT 'open',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela crednosso.batchs: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `batchs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `batchs` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela crednosso.input_type
 CREATE TABLE IF NOT EXISTS `input_type` (
@@ -115,7 +133,7 @@ INSERT INTO `order_type` (`id`, `name`, `active`) VALUES
 -- Copiando estrutura para tabela crednosso.requests
 CREATE TABLE IF NOT EXISTS `requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `lote` varchar(100) DEFAULT NULL,
+  `id_batch` int(11) DEFAULT NULL,
   `id_operation_type` int(11) NOT NULL DEFAULT 0,
   `id_origin` int(11) NOT NULL,
   `id_order_type` int(11) NOT NULL,
@@ -128,37 +146,14 @@ CREATE TABLE IF NOT EXISTS `requests` (
   `note` text DEFAULT NULL,
   `active` enum('Y','N') NOT NULL DEFAULT 'Y',
   `status` enum('open','closed') DEFAULT 'open',
-  `value_total` float DEFAULT NULL,
-  `confirmed_value` float DEFAULT NULL,
+  `value_total` float DEFAULT 0,
+  `confirmed_value` float DEFAULT 0,
   `change_in_confirmation` enum('Y','N') DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.requests: ~22 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.requests: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `requests` DISABLE KEYS */;
-INSERT INTO `requests` (`id`, `lote`, `id_operation_type`, `id_origin`, `id_order_type`, `id_destiny`, `date_request`, `qt_10`, `qt_20`, `qt_50`, `qt_100`, `note`, `active`, `status`, `value_total`, `confirmed_value`, `change_in_confirmation`) VALUES
-	(1, '00501523', 3, 5, 2, 15, '0000-00-00', 200, 200, 200, 200, 'TESTE editado', 'Y', 'closed', NULL, 36000, 'Y'),
-	(2, '00501523', 2, 2, 1, 8, '0000-00-00', 100, 100, 100, 100, 'teste 2 ', 'Y', 'closed', NULL, NULL, 'Y'),
-	(3, '01100118', 2, 13, 1, 8, '2021-10-04', 1000, 0, 500, 611, 'teste 3', 'Y', 'open', NULL, NULL, 'N'),
-	(4, '1500823', 2, 15, 2, 8, '0000-00-00', 11, 1, 155, 12, 'sasaa', 'Y', 'open', NULL, NULL, 'N'),
-	(5, '1500823', 3, 5, 2, 18, '0000-00-00', 10, 20, 30, 40, 'TESTE editado', 'N', 'open', NULL, NULL, 'N'),
-	(6, '200623', 2, 2, 1, 6, '0000-00-00', 1, 1, 1, 1, 'aasasas', 'Y', 'open', NULL, NULL, 'N'),
-	(7, '0020066', 2, 2, 1, 9, '2021-10-06', 2, 5, 3, 1, 'lote 0020066', 'Y', 'open', NULL, NULL, 'N'),
-	(8, '200623', 3, 4, 1, 14, '0000-00-00', 2, 5, 3, 5, 'primeiro do lote', 'Y', 'open', NULL, NULL, 'N'),
-	(9, '01100118', 3, 4, 1, 14, '2021-10-07', 2, 5, 3, 5, 'primeiro do lote', 'Y', 'open', NULL, NULL, 'N'),
-	(10, '00401410', 3, 4, 1, 14, '2021-10-07', 2, 5, 3, 5, 'primeiro do lote', 'Y', 'open', NULL, NULL, 'N'),
-	(11, '00401410', 3, 9, 1, 7, '2021-10-07', 54, 51, 18, 51, 'lote 2', 'Y', 'open', NULL, NULL, 'N'),
-	(12, '00301012', 2, 3, 2, 10, '2021-10-07', 15, 51, 5155, 515, 'mais um teste lote', 'Y', 'open', NULL, NULL, 'N'),
-	(13, '00901813', 2, 9, 1, 18, '2021-10-07', 15, 51, 511, 15155, 'lote 0', 'Y', 'open', NULL, NULL, 'N'),
-	(14, '01100118', 3, 6, 1, 17, '2021-10-07', 23, 51, 115, 45, 'teste pra saci', 'Y', 'open', NULL, NULL, 'N'),
-	(15, '01100118', 1, 6, 2, 12, '2021-10-07', 12, 216, 26, 15, '# chateado', 'Y', 'open', NULL, NULL, 'N'),
-	(16, '00301616', 3, 3, 1, 16, '2021-10-07', 1, 151, 1551, 15, 'peiddo #', 'Y', 'open', NULL, NULL, 'N'),
-	(17, '01200717', 2, 12, 1, 7, '2021-10-07', 4, 1, 1, 1221, '1', 'Y', 'open', NULL, NULL, 'N'),
-	(18, '01100118', 3, 11, 1, 1, '2021-10-07', 100, 100, 100, 100, '#1', 'Y', 'open', NULL, 18000, 'N'),
-	(19, '01100118', 3, 11, 1, 1, '2021-10-07', 51, 15, 1515, 1551, '#1', 'Y', 'open', NULL, NULL, 'N'),
-	(20, '01100118', 1, 4, 1, 13, '2021-10-07', 45, 51152, 1, 565, 'epdiredo as', 'Y', 'open', NULL, NULL, 'N'),
-	(21, '04604621', 2, 46, 1, 46, '2021-10-07', 100, 100, 100, 100, '', 'Y', 'open', NULL, NULL, 'N'),
-	(22, '04604621', 1, 6, 1, 10, '2021-10-08', 121, 515, 211, 511, 'sasa', 'Y', 'open', 73160, 0, 'N');
 /*!40000 ALTER TABLE `requests` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela crednosso.shipping_company
@@ -287,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela crednosso.users: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela crednosso.users: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`, `nivel`, `token`, `date_login`, `change_date`, `active`) VALUES
 	(1, 'Tarcisio Silva', 'TARCISIOSILVA', 'tarcisio.silva@crednosso.com.br', '$2y$10$YW7P6YfkEzFg0asoolofV.J.CvvKl.jGVZyYpiZmrz0Ff/iM3JzNi', 'admin', '$2y$10$bnGglRN8Qmwf9DuUFAU94uJgUegLHa2enibHQHYAhGRxKALzQnkZW', NULL, NULL, 'Y'),
